@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.polka-dot-bg {
+  background-color: #e4f7fc;
+  opacity: 0.8;
+  background-image: radial-gradient(#444cf7 0.5px, #ffffff 0.5px);
+  background-size: 10px 10px;
+}

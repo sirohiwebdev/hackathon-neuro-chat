@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import React from 'react'
+import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HomePage } from './pages'
+import { AuthenticatedRoute } from './components/Auth/AuthenticatedRoute'
+import LoginPage from './pages/Login'
+import QueryDetails from './pages/QueryDetails'
+import HelpStudents from './pages/HelpStudents'
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path={'/'}
+          element={
+            <AuthenticatedRoute>
+              <HomePage />
+            </AuthenticatedRoute>
+          }
+        />
+        <Route
+          path={'/login'}
+          element={
+            <AuthenticatedRoute inverse redirectTo={'/'}>
+              <LoginPage />
+            </AuthenticatedRoute>
+          }
+        />
+
+        <Route
+          path={'/query/:queryId'}
+          element={
+            <AuthenticatedRoute>
+              <QueryDetails />
+            </AuthenticatedRoute>
+          }
+        />
+
+        <Route
+          path={'/resolve/:queryId'}
+          element={
+            <AuthenticatedRoute>
+              <HelpStudents />
+            </AuthenticatedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
-export default App;
+export default App

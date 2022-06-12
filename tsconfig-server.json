@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "outDir": "./dist",
+    "lib": ["ES2016"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "CommonJS",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmitOnError": false
+  },
+  "include": ["src"],
+  "exclude": [
+    "src/components",
+    "src/containers",
+    "src/pages",
+    "src/hooks",
+    "node_modules/mongodb/src/**",
+    "src/lib/api.ts",
+    "src/*.tsx"
+  ]
+}

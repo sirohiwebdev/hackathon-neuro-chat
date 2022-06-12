@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.apiRouter = void 0;
+const tslib_1 = require("tslib");
+const express_1 = (0, tslib_1.__importDefault)(require("express"));
+const user_1 = (0, tslib_1.__importDefault)(require("./user"));
+const ticket_1 = (0, tslib_1.__importDefault)(require("./ticket"));
+const query_1 = (0, tslib_1.__importDefault)(require("./query"));
+const mentor_1 = (0, tslib_1.__importDefault)(require("./mentor"));
+const communication_1 = (0, tslib_1.__importDefault)(require("./communication"));
+exports.apiRouter = express_1.default.Router();
+exports.apiRouter.use('/users', user_1.default);
+exports.apiRouter.use('/communications', communication_1.default);
+exports.apiRouter.use('/mentors', mentor_1.default);
+exports.apiRouter.use('/tickets', ticket_1.default);
+exports.apiRouter.use('/query', query_1.default);

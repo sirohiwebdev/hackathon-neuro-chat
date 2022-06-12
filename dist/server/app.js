@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
+const tslib_1 = require("tslib");
+const express_1 = (0, tslib_1.__importDefault)(require("express"));
+const cors_1 = (0, tslib_1.__importDefault)(require("cors"));
+const controllers_1 = require("./controllers");
+const auth_1 = require("./controllers/auth");
+const body_parser_1 = (0, tslib_1.__importDefault)(require("body-parser"));
+const path = (0, tslib_1.__importStar)(require("path"));
+exports.app = (0, express_1.default)();
+exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
+exports.app.use(body_parser_1.default.json());
+exports.app.use((0, cors_1.default)());
+exports.app.use('/api', controllers_1.apiRouter);
+exports.app.use('/auth', auth_1.authRouter);
+exports.app.use('/', express_1.default.static(path.join(process.cwd(), 'build')));
+exports.app.use((err, req, res, next) => {
+    console.log(err.stack);
+    return res.status(500).json({ message: 'Something went wrong' });
+});
