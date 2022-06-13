@@ -30,6 +30,16 @@ router.get('/me', validateUser_1.validateUser, (req, res) => (0, tslib_1.__await
     }
     return res.json(responseWithAssignee);
 }));
+router.post('/new', 
+// @ts-ignore
+validateUser_1.validateUser, (0, validateUser_1.validateRole)(models_1.UserRole.STUDENT), (0, express_validator_1.body)(['title', 'description']).exists(), validateReq_1.validateReq, (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
+    const { body, user } = req;
+    const insert = yield queryModel.insert(Object.assign(Object.assign({}, body), { from: user.id, status: models_1.QueryStatus.OPEN }));
+    console.log('Created', insert.id);
+    // Send broadcast to all mentors connected
+    socket_1.io.sockets.to('mentor').emit('query_assign_req', insert.id);
+    return res.json(insert);
+}));
 router.get('/:id', (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const query = yield queryModel.get(id);
@@ -70,15 +80,5 @@ router.post('/', (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, fu
     console.log('Query', body);
     const q = yield queryModel.find(body, Number(limit) || undefined, Number(page) || undefined);
     return res.json(q);
-}));
-router.post('/', 
-// @ts-ignore
-validateUser_1.validateUser, (0, validateUser_1.validateRole)(models_1.UserRole.STUDENT), (0, express_validator_1.body)(['title', 'description']).exists(), validateReq_1.validateReq, (req, res) => (0, tslib_1.__awaiter)(void 0, void 0, void 0, function* () {
-    const { body, user } = req;
-    const insert = yield queryModel.insert(Object.assign(Object.assign({}, body), { from: user.id, status: models_1.QueryStatus.OPEN }));
-    console.log('Created', insert.id);
-    // Send broadcast to all mentors connected
-    socket_1.io.sockets.to('mentor').emit('query_assign_req', insert.id);
-    return res.json(insert);
 }));
 exports.default = router;

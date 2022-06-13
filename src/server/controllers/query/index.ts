@@ -46,6 +46,30 @@ router.get('/me', validateUser, async (req: AuthenticatedRequest, res) => {
   return res.json(responseWithAssignee)
 })
 
+
+router.post(
+  '/new',
+  // @ts-ignore
+  validateUser,
+  validateRole(UserRole.STUDENT),
+  body(['title', 'description']).exists(),
+  validateReq,
+  async (req: AuthenticatedRequest, res) => {
+    const { body, user } = req
+    const insert = await queryModel.insert({
+      ...body,
+      from: user.id,
+      status: QueryStatus.OPEN,
+    })
+
+    console.log('Created', insert.id)
+
+    // Send broadcast to all mentors connected
+    io.sockets.to('mentor').emit('query_assign_req', insert.id)
+    return res.json(insert)
+  }
+)
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params
   const query = await queryModel.get(id)
@@ -92,6 +116,8 @@ router.put('/:id', async (req, res) => {
   return res.status(200).json(data)
 })
 
+
+
 router.post('/', async (req, res) => {
   const { withAssignee, page, limit } = req.query
   const { body } = req
@@ -105,28 +131,4 @@ router.post('/', async (req, res) => {
 
   return res.json(q)
 })
-
-router.post(
-  '/',
-  // @ts-ignore
-  validateUser,
-  validateRole(UserRole.STUDENT),
-  body(['title', 'description']).exists(),
-  validateReq,
-  async (req: AuthenticatedRequest, res) => {
-    const { body, user } = req
-    const insert = await queryModel.insert({
-      ...body,
-      from: user.id,
-      status: QueryStatus.OPEN,
-    })
-
-    console.log('Created', insert.id)
-
-    // Send broadcast to all mentors connected
-    io.sockets.to('mentor').emit('query_assign_req', insert.id)
-    return res.json(insert)
-  }
-)
-
 export default router

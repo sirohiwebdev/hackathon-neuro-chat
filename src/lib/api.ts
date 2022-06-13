@@ -94,7 +94,7 @@ export const getQueryById = (id: string) =>
 
 export const addQuery = (params: Pick<Query, 'title' | 'description'>) =>
   post<any, Pick<Query, 'title' | 'description'>, any>(
-    `${basePath}/api/query`,
+    `${basePath}/api/query/new`,
     {
       auth: true,
       body: params,
